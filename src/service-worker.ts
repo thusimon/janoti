@@ -13,6 +13,9 @@ import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import { SWMessageType } from './types';
+import {connectDB, DB, KEYS} from './db/db-helper';
+import { ja_en } from './db/ja_en'
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -57,10 +60,15 @@ registerRoute(
 // precache, in this case same-origin .png requests like those from in public/
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
-  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'),
+  ({ url }) => {
+    const path = url.pathname;
+    return url.origin === self.location.origin &&
+      (path.endsWith('.png') || path.endsWith('.ico') || path.endsWith('manifest.json'));
+  },
   // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  // this stradegy is catch first, and then network, then use network to update cache
   new StaleWhileRevalidate({
-    cacheName: 'images',
+    cacheName: 'static-miscs',
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
@@ -71,10 +79,57 @@ registerRoute(
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+self.addEventListener('message', async (event) => {
+  if (event.data) {
+    const type = event.data.type;
+    switch (type) {
+      case SWMessageType.SKIP_WAITING: {
+        self.skipWaiting();
+        break;
+      }
+      case SWMessageType.PAGE_LOADS: {
+        const lastNotificationTime = await DB.get(KEYS.last_visit_time);
+        const data = {
+          lastNotificationTime,
+          ja_en
+        }
+        self.clients.matchAll().then(clis => {
+          clis.forEach(c => {
+            c.postMessage({type: SWMessageType.SEND_PAGE_INIT_DATA, data})
+          });
+        });
+        break;
+      }
+      default:
+        break;
+    }
   }
 });
 
-// Any other custom service worker logic can go here.
+self.addEventListener('activate', async (event) => {
+  console.log('service worker activated');
+  await connectDB(1);
+})
+
+const notificationOptions: NotificationOptions = {
+  body: 'Vocabulary',
+  icon: '/assets/imgs/logo96.png',
+  dir: 'ltr',
+  lang: 'en-US',
+  vibrate: [200, 5000, 200],
+  badge: '/assets/imgs/logo96.png',
+  tag: 'confirm-notification',
+  renotify: true,
+  actions: [
+    { action: 'confirm', title: 'OK', icon: '/assets/imgs/check.png' },
+    { action: 'cancel', title: 'Cancel', icon: '/assets/imgs/cross.png' }
+  ]
+};
+
+setInterval(() => {
+  self.registration.showNotification('reminder!', notificationOptions);
+}, 3600*1000)
+
+console.log(ja_en[0]);
+
+
