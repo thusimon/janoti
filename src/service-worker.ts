@@ -128,7 +128,7 @@ const notificationOptions: NotificationOptions = {
 
 setInterval(() => {
   self.registration.showNotification('reminder!', notificationOptions);
-}, 3600*1000)
+}, 60*60*1000)
 
 console.log(ja_en[0]);
 

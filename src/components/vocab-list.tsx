@@ -1,25 +1,22 @@
-import React, {useEffect, useContext} from 'react'
-import { VocabRowProp } from '../types';
+import React, { useContext} from 'react'
 import { AppContext } from '../contexts/app-context';
 import VocabRow from './vocab-row';
 
+import './vocab-list.scss';
+
 const VocabList: React.FC = () => {
-  const { state, dispatch } = useContext(AppContext);
-  console.log(7, state);
-  useEffect(() => {
-    
-  }, []);
+  const { state } = useContext(AppContext);
   const ja_en = state.ja_en;
-  return (<div>
+  return (<div className='vocab-list'>
     <table>
-      <th>
-        <td>Kana</td>
-        <td>Kanji</td>
-        <td>Type</td>
-        <td>Translation</td>
-      </th>
+      <tr>
+        <th>Kana</th>
+        <th>Kanji</th>
+        <th>Type</th>
+        <th>Translation</th>
+      </tr>
       {ja_en.map(vocab => {
-        return <VocabRow {...vocab}></VocabRow>
+        return <VocabRow {...vocab}></VocabRow>;
       })}
     </table>
   </div>);

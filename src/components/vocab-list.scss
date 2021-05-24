@@ -1,0 +1,28 @@
+.vocab-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      width: 25%;
+    }
+
+    th {
+      background: cornsilk;
+      position: sticky;
+      top: 0;
+      box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  }
+}

@@ -13,6 +13,11 @@ export const appReducer = (state: InitialStateType, action: Action) => {
         ...state,
         lastVisitTime: action.data.lastVisitTime
       }
+    case ActionType.SET_NAV_OPT:
+      return {
+        ...state,
+        nav_opt: action.data.nav_opt
+      }
     default:
       return state;
   }

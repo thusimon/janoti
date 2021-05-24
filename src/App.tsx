@@ -3,7 +3,8 @@ import './App.css';
 import { ActionType, SWMessageType } from './types'
 import { AppContext, initialState } from './contexts/app-context';
 import { appReducer } from './contexts/app-reducer';
-import VocabList from './components/vocab-list';
+import NavHeader from './components/nav-header';
+import MainView from './components/main-view';
 
 function App() {
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -30,9 +31,11 @@ function App() {
   }, []);
   return (
     <AppContext.Provider value={{ state, dispatch }}>
-      <div className="App">
-        <header className="App-header"></header>
-        <VocabList />
+      <div className='App'>
+        <NavHeader />
+        <div className='main'>
+          <MainView />
+        </div>
       </div>
     </AppContext.Provider>
   );
