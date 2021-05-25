@@ -8,11 +8,6 @@ export const appReducer = (state: InitialStateType, action: Action) => {
         ...action.data
       }
     }
-    case ActionType.SET_LAST_VISIT:
-      return {
-        ...state,
-        lastVisitTime: action.data.lastVisitTime
-      }
     case ActionType.SET_NAV_OPT:
       return {
         ...state,

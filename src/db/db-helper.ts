@@ -9,7 +9,8 @@ export enum DB_NAME {
 }
 
 export enum KEYS {
-  last_visit_time = 'last_visit_time'
+  last_visit_time = 'last_visit_time',
+  progress_idx = 'progress_idx'
 }
 
 let db: IDBPDatabase<JanotiDB>;

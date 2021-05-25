@@ -6,7 +6,6 @@ export enum SWMessageType {
 
 export enum ActionType {
   SET_ALL_DATA,
-  SET_LAST_VISIT,
   SET_NAV_OPT
 }
 
@@ -18,7 +17,7 @@ export type VocabRowProp = {
 }
 
 export type InitialStateType = {
-  lastVisitTime: Date | null;
+  progress_idx: number;
   ja_en: Array<VocabRowProp>;
   nav_opt: number;
 }

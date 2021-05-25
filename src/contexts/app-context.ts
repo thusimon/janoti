@@ -1,9 +1,8 @@
-import React, {createContext, useReducer, Dispatch } from 'react';
-import { appReducer } from './app-reducer';
+import React, {createContext, Dispatch } from 'react';
 import { InitialStateType, Action } from '../types';
 
 export const initialState: InitialStateType = {
-  lastVisitTime: null,
+  progress_idx: 0,
   ja_en: [],
   nav_opt: 0
 }

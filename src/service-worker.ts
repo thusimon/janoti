@@ -88,9 +88,9 @@ self.addEventListener('message', async (event) => {
         break;
       }
       case SWMessageType.PAGE_LOADS: {
-        const lastNotificationTime = await DB.get(KEYS.last_visit_time);
+        const progress_idx = await DB.get(KEYS.progress_idx);
         const data = {
-          lastNotificationTime,
+          progress_idx,
           ja_en
         }
         self.clients.matchAll().then(clis => {
