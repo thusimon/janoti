@@ -88,7 +88,7 @@ self.addEventListener('message', async (event) => {
         break;
       }
       case SWMessageType.PAGE_LOADS: {
-        const progress_idx = await DB.get(KEYS.progress_idx);
+        const progress_idx = await DB.get(KEYS.progress_idx) || 0;
         const data = {
           progress_idx,
           ja_en

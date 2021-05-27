@@ -1,0 +1,30 @@
+.vocab-card {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  border: 1px solid #0077cc;
+  min-height: 20%;
+  .kana-container{
+    order: 0;
+    height: 30%;
+    .kana {
+      display: inline-block;
+    }
+    button {
+      display: inline-block;
+      height: 40px;
+      width: 40px;
+    }
+  }
+  .kanji {
+    order: 1;
+    height: 30%;
+  }
+  .trans-container {
+    order: 2;
+    height: 40%;
+    .trans {
+      margin: 0px 20px;
+    }
+  }
+}
