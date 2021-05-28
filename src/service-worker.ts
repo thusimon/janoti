@@ -82,6 +82,7 @@ registerRoute(
 self.addEventListener('message', async (event) => {
   if (event.data) {
     const type = event.data.type;
+    const data = event.data.data;
     switch (type) {
       case SWMessageType.SKIP_WAITING: {
         self.skipWaiting();
@@ -98,6 +99,10 @@ self.addEventListener('message', async (event) => {
             c.postMessage({type: SWMessageType.SEND_PAGE_INIT_DATA, data})
           });
         });
+        break;
+      }
+      case SWMessageType.SET_DB_PROG_IDX: {
+        await DB.set(KEYS.progress_idx, data.progress_idx)
         break;
       }
       default:

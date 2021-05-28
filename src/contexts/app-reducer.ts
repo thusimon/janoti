@@ -13,6 +13,18 @@ export const appReducer = (state: InitialStateType, action: Action) => {
         ...state,
         nav_opt: action.data.nav_opt
       }
+    case ActionType.SET_PROG_IDX: {
+      return {
+        ...state,
+        progress_idx: action.data.progress_idx
+      }
+    }
+    case ActionType.SET_WEEK_VIEW: {
+      return {
+        ...state,
+        week_view: action.data.week_view
+      }
+    }
     default:
       return state;
   }

@@ -1,15 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { VocabRowProp } from '../types';
+import { ActionType, VocabRowProp, SWMessageType } from '../types';
 import { AppContext } from '../contexts/app-context';
 import VocabCard from './vocab-card';
 
 import './progress-view.scss';
 
 const ProgressView = () => {
-  const {state} = useContext(AppContext);
-  const {ja_en, progress_idx} = state;
+  const {state, dispatch} = useContext(AppContext);
+  const {ja_en, progress_idx, week_view} = state;
   const [cards, setCards] = useState<Array<VocabRowProp>>([]);
-  const [weekView, setWeekView] = useState<Array<Array<Array<VocabRowProp>>>>([]);
   /**
    * let's arrange the words in weeks view
    * each day contains 3 vocabularies
@@ -30,33 +29,60 @@ const ProgressView = () => {
     return rearrangeView;
   }
 
+  const getDayCards = (weekView: VocabRowProp[][][], weekIdx: number, dayIdx: number) => {
+    const weekDayView = weekView[weekIdx] ? weekView[weekIdx] : [];
+    const dayView = weekDayView[dayIdx] ? weekDayView[dayIdx] : [];
+    return dayView;
+  }
+
   useEffect(() => {
     const weekView = rearrangeData(ja_en, 21);
     const weekDayView: Array<Array<Array<VocabRowProp>>> = [];
     weekView.forEach(week => {
       weekDayView.push(rearrangeData(week, 3));
     });
-    setWeekView(weekDayView);
-    const weekIdx = Math.floor(progress_idx / 21);
-    const dayIdx = Math.floor((progress_idx - weekIdx * 21) / 3);
-    const cards = weekDayView[weekIdx][dayIdx];
+    dispatch({type: ActionType.SET_WEEK_VIEW, data: {week_view: weekDayView}});
+    const weekIdx = Math.floor(progress_idx / 7);
+    const dayIdx = Math.floor(progress_idx - weekIdx * 7);
+    const cards = getDayCards(weekDayView, weekIdx, dayIdx);
     setCards(cards);
-  }, [ja_en, progress_idx])
+  }, [ja_en])
 
-  
+  useEffect(() => {
+    const weekIdx = Math.floor(progress_idx / 7);
+    const dayIdx = Math.floor(progress_idx - weekIdx *7);
+    const cards = getDayCards(week_view, weekIdx, dayIdx);
+    setCards(cards);
+  }, [progress_idx, week_view])
 
-  const tableClick = (evt: React.MouseEvent) => {
-    console.log(evt);
-    const cell = evt.target as HTMLTableCellElement;
-    if (cell) {
-      const row = cell.closest('tr');
-      if (row) {
-        console.log("Row: " + row.rowIndex + " | Column: " + cell.cellIndex);
-      }
+  const arrowClick = (btnId: number) => {
+    let progress_idx_update = progress_idx;
+    switch(btnId) {
+      case 0:
+        // up arrow
+        progress_idx_update -= 7; 
+        break;
+      case 1:
+        // right arrow
+        progress_idx_update += 1;
+        break;
+      case 2:
+        // bottom arrow
+        progress_idx_update += 7;
+        break;
+      case 3:
+        // left arrow
+        progress_idx_update -= 1;
+        break;
+      default:
+        break;
     }
-  }
-  const arrowClick = (arrowIdx: number) => {
-    console.log(arrowIdx);
+    // final check
+    progress_idx_update = progress_idx_update >= 0 ? progress_idx_update : 0;
+    progress_idx_update = progress_idx_update <= ja_en.length / 3 ? progress_idx_update : Math.floor(ja_en.length / 3);
+    const dataPayload = {progress_idx: progress_idx_update};
+    dispatch({type: ActionType.SET_ALL_DATA, data: dataPayload});
+    navigator.serviceWorker.controller?.postMessage({type: SWMessageType.SET_DB_PROG_IDX, data: dataPayload});
   }
   return (
     <div className='progress-view-container'>

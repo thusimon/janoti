@@ -4,6 +4,7 @@
   margin: 20px;
   border: 1px solid #0077cc;
   min-height: 20%;
+  font-size: 2em;
   .kana-container{
     order: 0;
     height: 30%;
@@ -12,8 +13,9 @@
     }
     button {
       display: inline-block;
-      height: 40px;
-      width: 40px;
+      height: 2em;
+      width: 2em;
+      padding: 3px;
     }
   }
   .kanji {
