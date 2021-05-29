@@ -78,17 +78,13 @@ registerRoute(
 );
 
 // This allows the web app to trigger skipWaiting via
-// registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', async (event) => {
   if (event.data) {
     const type = event.data.type;
     const data = event.data.data;
     switch (type) {
-      case SWMessageType.SKIP_WAITING: {
-        self.skipWaiting();
-        break;
-      }
       case SWMessageType.PAGE_LOADS: {
+        await connectDB(1);
         const progress_idx = await DB.get(KEYS.progress_idx) || 0;
         const data = {
           progress_idx,
@@ -114,6 +110,21 @@ self.addEventListener('message', async (event) => {
 self.addEventListener('activate', async (event) => {
   console.log('service worker activated');
   await connectDB(1);
+  const progress_idx = await DB.get(KEYS.progress_idx) || 0;
+  const data = {
+    progress_idx,
+    ja_en
+  }
+  self.clients.matchAll().then(clis => {
+    clis.forEach(c => {
+      c.postMessage({type: SWMessageType.SEND_PAGE_INIT_DATA, data})
+    });
+  });
+});
+
+self.addEventListener('install', (event) => {
+  console.log('service worker installed, skip waiting');
+  self.skipWaiting();
 })
 
 const notificationOptions: NotificationOptions = {
@@ -131,10 +142,6 @@ const notificationOptions: NotificationOptions = {
   ]
 };
 
-setInterval(() => {
-  self.registration.showNotification('reminder!', notificationOptions);
-}, 60*60*1000)
-
-console.log(ja_en[0]);
-
-
+// setInterval(() => {
+//   self.registration.showNotification('reminder!', notificationOptions);
+// }, 60*60*1000);

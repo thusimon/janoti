@@ -1,5 +1,4 @@
 export enum SWMessageType {
-  SKIP_WAITING,
   PAGE_LOADS,
   SEND_PAGE_INIT_DATA,
   SET_DB_PROG_IDX

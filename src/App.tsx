@@ -9,7 +9,6 @@ import MainView from './components/main-view';
 function App() {
   const [state, dispatch] = useReducer(appReducer, initialState);
   useEffect(() => {
-    console.log('App loaded')
     if (!('serviceWorker' in navigator)) {
       return;
     }

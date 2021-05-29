@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { SWMessageType } from './types';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -30,13 +29,3 @@ serviceWorkerRegistration.register(serviceWorkerConfig);
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-// if ('serviceWorker' in navigator) {
-//   navigator.serviceWorker.ready.then( registration => {
-//     registration.active?.postMessage({type: SWMessageType.PAGE_LOADS});
-//   });
-
-//   navigator.serviceWorker.addEventListener('message', event => {
-//     console.log('client get message', event);
-//   });
-// }

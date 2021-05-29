@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { ActionType, VocabRowProp, SWMessageType } from '../types';
 import { AppContext } from '../contexts/app-context';
+import Loading from './loading';
 import VocabCard from './vocab-card';
 
 import './progress-view.scss';
@@ -107,7 +108,7 @@ const ProgressView = () => {
         </div>
         <div className='column-middle'>
           {
-            cards.map(card => <VocabCard {...card} />)
+            ja_en.length > 0 ? cards.map(card => <VocabCard {...card} />) : <Loading />
           }
         </div>
         <div className='column-edge column-right'>

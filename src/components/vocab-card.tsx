@@ -14,7 +14,7 @@ const VocabCard = ({kana, kanji, type, trans}: VocabRowProp) => {
   return (<div className='vocab-card'>
     <div className='kana-container'>
       <div className='kana'>{kana}</div>
-      <button className='pronounce' onClick={pronounceBtnClick}>
+      <button className='pronounce' aria-label='Read Vocabulary' onClick={pronounceBtnClick}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke-width="3" stroke="#004AAD">
           <polyline points="10,21 3,21 3,11 10,11 " />
           <polyline points="10,11 20,3.8 20,28.2 10,21 "/>

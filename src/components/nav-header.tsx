@@ -13,12 +13,14 @@ const NavHeader = () => {
     return state.nav_opt === nav_opt ? 'nav-link chosen' : 'nav-link';
   }
   return (
-    <nav className='App-header'>
-      <a onClick={(evt) => {evt.preventDefault(); onclick(0)}} className={getClassName(0)} href='#'>My Learning Path</a>
-      <span>|</span>
-      <a onClick={(evt) => {evt.preventDefault(); onclick(1)}} className={getClassName(1)} href='#'>All N2 Vocabulary</a>
-      <span>|</span>
-    </nav>
+    <header>
+      <nav className='App-header'>
+        <a onClick={(evt) => {evt.preventDefault(); onclick(0)}} className={getClassName(0)} href='#'>My Learning Path</a>
+        <span>|</span>
+        <a onClick={(evt) => {evt.preventDefault(); onclick(1)}} className={getClassName(1)} href='#'>All N2 Vocabulary</a>
+        <span>|</span>
+      </nav>
+    </header>
   );
 }
 
