@@ -127,21 +127,23 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 })
 
+
 const notificationOptions: NotificationOptions = {
   body: 'Vocabulary',
   icon: '/assets/imgs/logo96.png',
   dir: 'ltr',
   lang: 'en-US',
-  vibrate: [200, 5000, 200],
+  vibrate: [200, 8000, 200],
   badge: '/assets/imgs/logo96.png',
-  tag: 'confirm-notification',
-  renotify: true,
+  tag: 'reminder',
+  renotify: false,
   actions: [
-    { action: 'confirm', title: 'OK', icon: '/assets/imgs/check.png' },
+    { action: 'confirm', title: 'Check', icon: '/assets/imgs/check.png' },
     { action: 'cancel', title: 'Cancel', icon: '/assets/imgs/cross.png' }
   ]
 };
 
-// setInterval(() => {
-//   self.registration.showNotification('reminder!', notificationOptions);
-// }, 60*60*1000);
+self.addEventListener('periodicsync', (event: any) => {
+  console.log(147, event);
+  self.registration.showNotification('reminder', notificationOptions);
+});
